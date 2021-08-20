@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.4;
+  background-color: #f3f2ef;
+  color: #000000e6;
+}
+
+li {
+  list-style: none;
+}
+
+.app-body {
+  min-height: 92vh;
+  width: 1128px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  padding-top: 2rem;
+  gap: 1.5rem;
+}

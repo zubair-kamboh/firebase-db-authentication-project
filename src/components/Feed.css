@@ -1,0 +1,128 @@
+.post_input_container {
+  background-color: white;
+  border-radius: 9px;
+  padding: 1rem;
+}
+
+.profile_input {
+  display: flex;
+}
+
+.profile_input .avatar {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+form {
+  background-color: transparent;
+  flex: 1;
+  width: 100%;
+  padding-left: 0.5rem;
+}
+
+.profile_input input {
+  width: 100%;
+  height: 100%;
+
+  border-radius: 2rem;
+  padding: 0 0 0 1rem;
+  color: gray;
+  border: 1px solid gray;
+
+  transition: 0.2s ease;
+  outline: none;
+}
+
+.profile_input input:hover {
+  background-color: #f3f2ef;
+}
+
+.profile_input button {
+  display: none;
+}
+
+.profile_uploads {
+  margin-top: 1.2rem;
+}
+
+.profile_uploads ul {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile_uploads ul li {
+  display: flex;
+  align-items: center;
+  color: gray;
+  font-size: 14px;
+  transition: 0.3s ease;
+  padding: 0.7rem 0.9rem;
+}
+.profile_uploads ul li:hover {
+  background-color: #f3f2ef;
+}
+
+.profile_uploads ul li span {
+  margin-left: 0.5rem;
+}
+
+/* Posts */
+.posts {
+  margin: 2rem 0;
+}
+
+.post {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 9px;
+}
+
+.channel_details_container {
+  display: flex;
+  align-items: center;
+}
+
+.title_container {
+  margin-left: 0.5rem;
+}
+
+.title_container h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.title_container p {
+  font-size: 0.9rem;
+  color: gray;
+}
+
+.article_post {
+  margin: 1rem 0rem;
+  font-size: 0.9rem;
+}
+
+.post_buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post_buttons li {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem 0.7rem;
+  transition: 0.3s ease;
+  font-size: 14px;
+}
+
+.post_buttons li:hover {
+  background-color: #f3f2ef;
+}
+
+.post_buttons li span {
+  margin-left: 0.5rem;
+}
