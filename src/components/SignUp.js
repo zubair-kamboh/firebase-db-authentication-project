@@ -8,10 +8,11 @@ import Checkbox from '@mui/material/Checkbox'
 import Link from '@mui/material/Link'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined'
+import { db } from '../firebase'
 
 function Copyright(props) {
   return (
@@ -22,7 +23,7 @@ function Copyright(props) {
       {...props}
     >
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="https://zubairkamboh.com/">
         Your Website
       </Link>{' '}
       {new Date().getFullYear()}
@@ -57,10 +58,10 @@ export default function SignUp() {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
+            <VpnKeyOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign up
           </Typography>
           <Box
             component="form"
@@ -68,6 +69,16 @@ export default function SignUp() {
             noValidate
             sx={{ mt: 1 }}
           >
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="fullname"
+              label="Full Name"
+              name="fullname"
+              autoComplete="full-name"
+              autoFocus
+            />
             <TextField
               margin="normal"
               required
@@ -108,7 +119,7 @@ export default function SignUp() {
               </Grid>
               <Grid item>
                 <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  {'Already have an account? Sign In'}
                 </Link>
               </Grid>
             </Grid>

@@ -4,7 +4,7 @@ import img from '../images/3.jpg'
 import UploadFile from './UploadFile'
 import Post from './Post'
 import { db } from '../firebase'
-import firebase from 'firebase'
+import { collection, getDocs, query } from 'firebase/firestore'
 
 // icons
 import { Avatar } from '@material-ui/core'
@@ -19,29 +19,30 @@ const Feed = () => {
 
   // load posts
   useEffect(() => {
-    db.collection('posts')
-      .orderBy('timestamp', 'desc')
-      .onSnapshot((snapshot) =>
-        setPosts(
-          snapshot.docs.map((doc) => ({
-            id: doc.id,
-            data: doc.data(),
-          }))
-        )
-      )
-  }, [])
+    const getPosts = async () => {
+      const q = query(collection(db, 'posts'))
+
+      const querySnapshot = await getDocs(q)
+
+      querySnapshot.forEach((doc) => {
+        setPosts({ id: doc.id, data: doc.data() })
+      })
+    }
+    getPosts()
+    console.log(posts.data)
+  }, [posts])
 
   // on form submit
   const onFormSubmit = (e) => {
     e.preventDefault()
 
-    db.collection('posts').add({
-      name: 'Zubair Ali',
-      description: 'this is a test',
-      message: input,
-      photoUrl: '',
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    })
+    // db.collection('posts').add({
+    //   name: 'Zubair Ali',
+    //   description: 'this is a test',
+    //   message: input,
+    //   photoUrl: '',
+    //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    // })
 
     setInput('')
   }
@@ -50,8 +51,6 @@ const Feed = () => {
   const onInputChange = (e) => {
     setInput(e.target.value)
   }
-
-  console.log(posts)
 
   return (
     <main>
@@ -85,7 +84,7 @@ const Feed = () => {
       </div>
 
       {/* posts */}
-      <div className="posts">
+      {/* <div className="posts">
         {posts.map((post) => {
           return (
             <Post
@@ -97,7 +96,7 @@ const Feed = () => {
             />
           )
         })}
-      </div>
+      </div> */}
     </main>
   )
 }
