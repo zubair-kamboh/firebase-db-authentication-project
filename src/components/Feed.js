@@ -4,13 +4,55 @@ import img from '../images/3.jpg'
 import UploadFile from './UploadFile'
 import Post from './Post'
 import { db } from '../firebase'
+import { collection, query, onSnapshot, addDoc } from 'firebase/firestore'
+
+// icons
+import { Avatar } from '@material-ui/core'
+import PhotoIcon from '@material-ui/icons/Photo'
+import VideocamIcon from '@material-ui/icons/Videocam'
+import CreateIcon from '@material-ui/icons/Create'
+import EventAvailableIcon from '@material-ui/icons/EventAvailable'
+
+const Feed = () => {
+  const [input, setInput] = useState('')
+  const [posts, setPosts] = useState([])
+
+  // load posts
+  useEffect(() => {
+    const q = query(collection(db, 'posts'))
+    onSnapshot(q, (querySnapshot) => {
+      const posts = []
+      querySnapshot.forEach((doc) => {
+        posts.push({ id: doc.id, data: doc.data() })
+      })
+
+      setPosts(posts)
+    })
+  }, [])
 
   // on form submit
+  const onFormSubmit = async (e) => {
+    e.preventDefault()
+
+    // db.collection('posts').add({
+    //   name: 'Zubair Ali',
+    //   description: 'this is a test',
+    //   message: input,
+    //   photoUrl: '',
+    //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    // })
+
+    // await addDoc(collection, )
+
+    setInput('')
+  }
 
   // on input change
   const onInputChange = (e) => {
     setInput(e.target.value)
   }
+
+  console.log(posts)
 
   return (
     <main>
@@ -44,7 +86,7 @@ import { db } from '../firebase'
       </div>
 
       {/* posts */}
-      {/* <div className="posts">
+      <div className="posts">
         {posts.map((post) => {
           return (
             <Post
@@ -56,7 +98,7 @@ import { db } from '../firebase'
             />
           )
         })}
-      </div> */}
+      </div>
     </main>
   )
 }
