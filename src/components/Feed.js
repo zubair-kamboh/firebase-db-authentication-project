@@ -4,7 +4,15 @@ import img from '../images/3.jpg'
 import UploadFile from './UploadFile'
 import Post from './Post'
 import { db } from '../firebase'
-import { collection, getDocs, query } from 'firebase/firestore'
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  getDocs,
+  addDoc,
+  serverTimestamp,
+} from 'firebase/firestore'
 
 // icons
 import { Avatar } from '@material-ui/core'
@@ -19,37 +27,33 @@ const Feed = () => {
 
   // load posts
   useEffect(() => {
-    const getPosts = async () => {
+    const getdata = async () => {
       const q = query(collection(db, 'posts'))
 
       const querySnapshot = await getDocs(q)
-
       querySnapshot.forEach((doc) => {
-        setPosts({ id: doc.id, data: doc.data() })
+        console.log(doc.data())
       })
     }
-    getPosts()
-    console.log(posts.data)
-  }, [posts])
+
+    getdata()
+  }, [])
+
+  console.log(posts)
 
   // on form submit
-  const onFormSubmit = (e) => {
+  const onFormSubmit = async (e) => {
     e.preventDefault()
 
-    // db.collection('posts').add({
-    //   name: 'Zubair Ali',
-    //   description: 'this is a test',
-    //   message: input,
-    //   photoUrl: '',
-    //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    // })
+    await addDoc(collection(db, 'posts'), {
+      name: 'Zubair Ali',
+      description: 'this is a test',
+      message: input,
+      photoUrl: '',
+      timestamp: serverTimestamp(),
+    })
 
     setInput('')
-  }
-
-  // on input change
-  const onInputChange = (e) => {
-    setInput(e.target.value)
   }
 
   return (
@@ -62,7 +66,7 @@ const Feed = () => {
             <input
               type="text"
               value={input}
-              onChange={(e) => onInputChange(e)}
+              onChange={(e) => setInput(e.target.value)}
               placeholder="Start a post"
             />
           </form>
@@ -84,19 +88,20 @@ const Feed = () => {
       </div>
 
       {/* posts */}
-      {/* <div className="posts">
-        {posts.map((post) => {
-          return (
-            <Post
-              key={post.id}
-              name={post.data.name}
-              description={post.data.description}
-              message={post.data.message}
-              img={img}
-            />
-          )
-        })}
-      </div> */}
+      <div className="posts">
+        {posts &&
+          posts.map((post) => {
+            return (
+              <Post
+                key={post.id}
+                name={post.data.name}
+                description={post.data.description}
+                message={post.data.message}
+                img={img}
+              />
+            )
+          })}
+      </div>
     </main>
   )
 }
