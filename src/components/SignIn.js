@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -11,7 +11,12 @@ import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
+import Alert from '@mui/material/Alert'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { Link as RouterLink } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import { auth } from '../firebase'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
 function Copyright(props) {
   return (
@@ -22,7 +27,7 @@ function Copyright(props) {
       {...props}
     >
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="https://zubairkamboh.com/">
         Your Website
       </Link>{' '}
       {new Date().getFullYear()}
@@ -33,15 +38,24 @@ function Copyright(props) {
 
 const theme = createTheme()
 
-export default function SignIn() {
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    })
+const SignIn = () => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const location = useLocation()
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredentials) => {
+        const user = userCredentials.user
+        console.log(user)
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        const errorMessage = error.message
+        console.log(errorCode, errorMessage)
+      })
   }
 
   return (
@@ -62,6 +76,9 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+
+          {location.state && <Alert severity="success">{location.state}</Alert>}
+
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -75,14 +92,17 @@ export default function SignIn() {
               id="email"
               label="Email Address"
               name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
-              autoFocus
             />
             <TextField
               margin="normal"
               required
               fullWidth
               name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               label="Password"
               type="password"
               id="password"
@@ -102,12 +122,12 @@ export default function SignIn() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="#" variant="body1">
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link to="/" variant="body3" component={RouterLink}>
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
@@ -119,3 +139,5 @@ export default function SignIn() {
     </ThemeProvider>
   )
 }
+
+export default SignIn

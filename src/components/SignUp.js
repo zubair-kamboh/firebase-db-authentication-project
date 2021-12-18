@@ -5,14 +5,21 @@ import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import Link from '@mui/material/Link'
+import { Link } from '@mui/material'
+import { Link as RouterLink } from 'react-router-dom'
+
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
+import Alert from '@mui/material/Alert'
+
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined'
-import { db } from '../firebase'
+import { useState } from 'react'
+import { auth } from '../firebase'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 function Copyright(props) {
   return (
@@ -34,15 +41,33 @@ function Copyright(props) {
 
 const theme = createTheme()
 
-export default function SignUp() {
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    })
+const SignUp = () => {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+
+  const navigate = useNavigate()
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    if (!name || !email || !password) {
+      return alert('Please fill all the fields')
+    }
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user
+        console.log(user)
+        navigate('/signin', { state: 'You are registered! Please signin' })
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        const errorMessage = error.message
+        console.log(errorCode, errorMessage)
+        setError(errorMessage)
+      })
   }
 
   return (
@@ -63,6 +88,9 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
+
+          {error && <Alert severity="error">{error}</Alert>}
+
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -75,7 +103,9 @@ export default function SignUp() {
               fullWidth
               id="fullname"
               label="Full Name"
-              name="fullname"
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               autoComplete="full-name"
               autoFocus
             />
@@ -86,14 +116,17 @@ export default function SignUp() {
               id="email"
               label="Email Address"
               name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
-              autoFocus
             />
             <TextField
               margin="normal"
               required
               fullWidth
               name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               label="Password"
               type="password"
               id="password"
@@ -118,7 +151,7 @@ export default function SignUp() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link to="/signin" component={RouterLink} variant="body3">
                   {'Already have an account? Sign In'}
                 </Link>
               </Grid>
@@ -130,3 +163,5 @@ export default function SignUp() {
     </ThemeProvider>
   )
 }
+
+export default SignUp
