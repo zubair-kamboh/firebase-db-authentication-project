@@ -60,7 +60,7 @@ const SignUp = () => {
       .then((userCredential) => {
         const user = userCredential.user
         console.log(user)
-        navigate('/signin', { state: 'You are registered! Please signin' })
+        navigate('/', { state: 'You are registered! Please signin' })
       })
       .catch((error) => {
         const errorCode = error.code
@@ -145,13 +145,8 @@ const SignUp = () => {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
-                <Link to="/signin" component={RouterLink} variant="body3">
+                <Link to="/" component={RouterLink} variant="body3">
                   {'Already have an account? Sign In'}
                 </Link>
               </Grid>

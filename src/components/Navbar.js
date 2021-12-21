@@ -53,11 +53,6 @@ const Navbar = () => {
             <Navlink title="Messaging" Icon={MessageIcon} />
             <Navlink title="Notifications" Icon={NotificationsIcon} />
             <Navlink title="Me" Avatar={Avatar} />
-
-            {/* <div className="avatar-container">
-              <Avatar alt="Zubair Ali" className="avatar-img" src={image} />
-              <span>Me</span>
-            </div> */}
           </ul>
         </div>
       </div>

@@ -14,7 +14,7 @@ import Container from '@mui/material/Container'
 import Alert from '@mui/material/Alert'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { Link as RouterLink } from 'react-router-dom'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { auth } from '../firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 
@@ -41,7 +41,9 @@ const theme = createTheme()
 const SignIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
   const location = useLocation()
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -50,11 +52,13 @@ const SignIn = () => {
       .then((userCredentials) => {
         const user = userCredentials.user
         console.log(user)
+        navigate('/dashboared')
       })
       .catch((error) => {
         const errorCode = error.code
         const errorMessage = error.message
         console.log(errorCode, errorMessage)
+        setError(errorMessage)
       })
   }
 
@@ -77,7 +81,12 @@ const SignIn = () => {
             Sign in
           </Typography>
 
-          {location.state && <Alert severity="success">{location.state}</Alert>}
+          {location.state && (
+            <Alert variant="filled" severity="success">
+              {location.state}
+            </Alert>
+          )}
+          {error && <Alert severity="error">{error}</Alert>}
 
           <Box
             component="form"
@@ -127,7 +136,7 @@ const SignIn = () => {
                 </Link>
               </Grid>
               <Grid item>
-                <Link to="/" variant="body3" component={RouterLink}>
+                <Link to="/signup" variant="body3" component={RouterLink}>
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
