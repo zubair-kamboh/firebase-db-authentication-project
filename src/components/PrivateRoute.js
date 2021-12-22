@@ -1,11 +1,11 @@
 // import { Dashboard } from '@material-ui/icons'
 import React from 'react'
-import { Navigate } from 'react-router-dom'
-import { auth } from '../firebase'
+import { Navigate, Outlet } from 'react-router-dom'
+import { useAuth } from './AuthContext'
 const PrivateRoute = ({ children }) => {
-  const user = auth.currentUser
-  console.log(user && user.email)
-  return user ? children : <Navigate to="/" />
+  const { currentUser } = useAuth()
+
+  return currentUser ? children : <Navigate to="/" />
 }
 
 export default PrivateRoute

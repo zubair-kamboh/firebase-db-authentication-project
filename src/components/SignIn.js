@@ -10,13 +10,21 @@ import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
+
 import Alert from '@mui/material/Alert'
+import IconButton from '@mui/material/IconButton'
+import Collapse from '@mui/material/Collapse'
+
+import CloseIcon from '@mui/icons-material/Close'
+
+import Container from '@mui/material/Container'
+
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { Link as RouterLink } from 'react-router-dom'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { auth } from '../firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth'
+import { useAuth } from './AuthContext'
 
 function Copyright(props) {
   return (
@@ -45,9 +53,15 @@ const SignIn = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const { signIn, currentUser } = useAuth()
+  console.log(currentUser)
+
+  const [open, setOpen] = React.useState(true)
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
+    // await signIn(email, password)
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user
@@ -66,6 +80,7 @@ const SignIn = () => {
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
+
         <Box
           sx={{
             marginTop: 8,
@@ -81,10 +96,33 @@ const SignIn = () => {
             Sign in
           </Typography>
 
-          {location.state && (
-            <Alert variant="filled" severity="success">
-              {location.state}
-            </Alert>
+          <Typography component="h3">
+            {' '}
+            {currentUser ? currentUser.email : 'No user'}
+          </Typography>
+
+          {error && (
+            <Box sx={{ width: '100%' }}>
+              <Collapse in={open}>
+                <Alert
+                  action={
+                    <IconButton
+                      aria-label="close"
+                      color="inherit"
+                      size="small"
+                      onClick={() => {
+                        setOpen(false)
+                      }}
+                    >
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                  }
+                  sx={{ mb: 2 }}
+                >
+                  {location.state}
+                </Alert>
+              </Collapse>
+            </Box>
           )}
           {error && <Alert severity="error">{error}</Alert>}
 

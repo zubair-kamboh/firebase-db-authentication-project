@@ -20,6 +20,7 @@ import { useState } from 'react'
 import { auth } from '../firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from './AuthContext'
 
 function Copyright(props) {
   return (
@@ -46,26 +47,24 @@ const SignUp = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const { signUp } = useAuth()
 
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     if (!name || !email || !password) {
       return alert('Please fill all the fields')
     }
 
-    createUserWithEmailAndPassword(auth, email, password)
+    await signUp(email, password)
       .then((userCredential) => {
-        const user = userCredential.user
-        console.log(user)
         navigate('/', { state: 'You are registered! Please signin' })
       })
       .catch((error) => {
         const errorCode = error.code
         const errorMessage = error.message
-        console.log(errorCode, errorMessage)
         setError(errorMessage)
       })
   }
