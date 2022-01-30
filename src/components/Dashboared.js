@@ -4,29 +4,35 @@ import Feed from './Feed'
 import '../App.css'
 import { auth } from '../firebase'
 import { onAuthStateChanged } from 'firebase/auth'
-import { Button } from '@mui/material'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Button, Container, Grid } from '@mui/material'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 
 const Dashboared = ({ user }) => {
-  const location = useLocation()
   const navigate = useNavigate()
-  const { currentUser } = useAuth()
+  let { currentUser } = useAuth()
 
   const logout = () => {
     auth.signOut()
+
     navigate('/')
   }
 
   return (
     <main className="app-body1">
-      <h1>{currentUser && currentUser.email}</h1>
-      <Button onClick={logout} variant="contained" color="secondary">
-        Logout
-      </Button>
-      {/* <Sidebar />
-      <Feed />
-      <Sidebar /> */}
+      <Container maxWidth="xl" sx={{ my: 3 }}>
+        <Grid container spacing={5}>
+          <Grid item md={3}>
+            <Sidebar />
+          </Grid>
+          <Grid item md={6}>
+            <Feed />
+          </Grid>
+          <Grid item md={3}>
+            <Sidebar />
+          </Grid>
+        </Grid>
+      </Container>
     </main>
   )
 }

@@ -50,13 +50,9 @@ const SignIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const location = useLocation()
   const navigate = useNavigate()
 
-  const { signIn, currentUser } = useAuth()
-  console.log(currentUser)
-
-  const [open, setOpen] = React.useState(true)
+  const { currentUser } = useAuth()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -66,7 +62,7 @@ const SignIn = () => {
       .then((userCredentials) => {
         const user = userCredentials.user
         console.log(user)
-        navigate('/dashboared')
+        navigate('/dashboard')
       })
       .catch((error) => {
         const errorCode = error.code
@@ -101,7 +97,7 @@ const SignIn = () => {
             {currentUser ? currentUser.email : 'No user'}
           </Typography>
 
-          {error && (
+          {/* {error && (
             <Box sx={{ width: '100%' }}>
               <Collapse in={open}>
                 <Alert
@@ -123,7 +119,7 @@ const SignIn = () => {
                 </Alert>
               </Collapse>
             </Box>
-          )}
+          )} */}
           {error && <Alert severity="error">{error}</Alert>}
 
           <Box

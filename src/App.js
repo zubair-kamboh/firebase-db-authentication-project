@@ -1,60 +1,75 @@
 import React, { useEffect, useState } from 'react'
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import SignIn from './components/SignIn'
 import SignUp from './components/SignUp'
 import Navbar from './components/Navbar'
 import './App.css'
+
 import Dashboared from './components/Dashboared'
-import { auth } from './firebase'
-import { onAuthStateChanged } from 'firebase/auth'
 
-import PrivateRoute from './components/PrivateRoute'
-import { AuthProvider, useAuth } from './components/AuthContext'
+import { IsAuthenticated, IsNotAuthenticated } from './components/PrivateRoute'
+import { AuthProvider } from './components/AuthContext'
 
-function SigninPrivateRoute({ children }) {
-  const { currentUser } = useAuth()
-  console.log(currentUser, auth.currentUser)
-  return !auth.currentUser ? children : <Navigate to="/dashboared" />
-}
+//loader
+import { HashLoader } from 'react-spinners'
 
 const App = () => {
-  const [user, setUser] = useState()
-  const [isLoggedIn, setisLoggedIn] = useState(false)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // window.addEventListener('load', () => setLoading(!loading))
+    setTimeout(() => {
+      setLoading(!loading)
+    }, 2000)
+  }, [])
 
   return (
     <AuthProvider>
-      <div className="app">
-        <Router>
-          {/* <Navbar /> */}
-          <Routes>
-            {/* private route */}
+      {loading ? (
+        <div
+          style={{
+            height: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <HashLoader color="#36D7B7" loading={loading} size={150} />
+        </div>
+      ) : (
+        <div className="app">
+          <Router>
+            <Navbar />
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <IsNotAuthenticated>
+                    <SignIn />
+                  </IsNotAuthenticated>
+                }
+              />
 
-            <Route
-              path="/"
-              element={
-                <SigninPrivateRoute>
-                  <SignIn />
-                </SigninPrivateRoute>
-              }
-            />
-
-            <Route path="/signup" element={<SignUp />} />
-            <Route
-              path="/dashboared"
-              element={
-                <PrivateRoute>
-                  <Dashboared />
-                </PrivateRoute>
-              }
-            />
-          </Routes>
-        </Router>
-      </div>
+              <Route
+                path="/signup"
+                element={
+                  <IsNotAuthenticated>
+                    <SignUp />
+                  </IsNotAuthenticated>
+                }
+              />
+              <Route
+                path="/dashboard"
+                element={
+                  <IsAuthenticated>
+                    <Dashboared />
+                  </IsAuthenticated>
+                }
+              />
+            </Routes>
+          </Router>
+        </div>
+      )}
     </AuthProvider>
   )
 }

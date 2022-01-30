@@ -7,9 +7,10 @@ import { db } from '../firebase'
 import {
   collection,
   query,
-  onSnapshot,
+  getDocs,
   addDoc,
   serverTimestamp,
+  onSnapshot,
   orderBy,
 } from 'firebase/firestore'
 
@@ -26,16 +27,22 @@ const Feed = () => {
 
   // load posts
   useEffect(() => {
-    const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'))
-    onSnapshot(q, (querySnapshot) => {
-      const posts = []
-      querySnapshot.forEach((doc) => {
-        posts.push({ id: doc.id, data: doc.data() })
-      })
+    const getdata = async () => {
+      const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'))
 
-      setPosts(posts)
-    })
+      onSnapshot(q, (querySnapshot) => {
+        const mydata = []
+        querySnapshot.forEach((doc) => {
+          mydata.push(doc.data())
+        })
+        setPosts(mydata)
+      })
+    }
+
+    getdata()
   }, [])
+
+  console.log(posts)
 
   // on form submit
   const onFormSubmit = async (e) => {
@@ -52,13 +59,6 @@ const Feed = () => {
     setInput('')
   }
 
-  // on input change
-  const onInputChange = (e) => {
-    setInput(e.target.value)
-  }
-
-  console.log(posts)
-
   return (
     <main>
       {/* post input */}
@@ -69,7 +69,7 @@ const Feed = () => {
             <input
               type="text"
               value={input}
-              onChange={(e) => onInputChange(e)}
+              onChange={(e) => setInput(e.target.value)}
               placeholder="Start a post"
             />
           </form>
@@ -92,17 +92,18 @@ const Feed = () => {
 
       {/* posts */}
       <div className="posts">
-        {posts.map((post) => {
-          return (
-            <Post
-              key={post.id}
-              name={post.data.name}
-              description={post.data.description}
-              message={post.data.message}
-              img={img}
-            />
-          )
-        })}
+        {posts &&
+          posts.map((post) => {
+            return (
+              <Post
+                key={post.id}
+                name={post.name}
+                description={post.description}
+                message={post.message}
+                img={img}
+              />
+            )
+          })}
       </div>
     </main>
   )

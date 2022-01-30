@@ -8,7 +8,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import HomeIcon from '@material-ui/icons/Home'
 import SettingsInputAntennaIcon from '@material-ui/icons/SettingsInputAntenna'
 import WorkIcon from '@material-ui/icons/Work'
-import MessageIcon from '@material-ui/icons/Message'
+// import MessageIcon from '@material-ui/icons/Message'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import { Avatar } from '@material-ui/core'
 
@@ -50,7 +50,7 @@ const Navbar = () => {
             <Navlink title="Home" Icon={HomeIcon} />
             <Navlink title="My Network" Icon={SettingsInputAntennaIcon} />
             <Navlink title="Jobs" Icon={WorkIcon} />
-            <Navlink title="Messaging" Icon={MessageIcon} />
+            <Navlink title="Messaging" Icon={WorkIcon} />
             <Navlink title="Notifications" Icon={NotificationsIcon} />
             <Navlink title="Me" Avatar={Avatar} />
           </ul>
