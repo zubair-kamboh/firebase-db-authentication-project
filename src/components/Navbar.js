@@ -11,8 +11,16 @@ import WorkIcon from '@material-ui/icons/Work'
 // import MessageIcon from '@material-ui/icons/Message'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import { Avatar } from '@material-ui/core'
+import { getAuth } from 'firebase/auth'
+import { useAuth } from './AuthContext'
+import { useEffect } from 'react'
 
 const Navbar = () => {
+  const [photo, setPhoto] =
+    'https://www.nicepng.com/png/detail/138-1388174_login-account-icon.png'
+
+  const { currentUser } = useAuth()
+
   return (
     <header className="nav-bar">
       <div className="header-container">
@@ -23,7 +31,7 @@ const Navbar = () => {
             width="34"
             height="34"
             viewBox="0 0 34 34"
-            class="global-nav__logo logo"
+            className="global-nav__logo logo"
           >
             <title>LinkedIn</title>
 
@@ -52,7 +60,10 @@ const Navbar = () => {
             <Navlink title="Jobs" Icon={WorkIcon} />
             <Navlink title="Messaging" Icon={WorkIcon} />
             <Navlink title="Notifications" Icon={NotificationsIcon} />
-            <Navlink title="Me" Avatar={Avatar} />
+            <Navlink
+              title="Me"
+              photo={currentUser?.photoURL ? currentUser.photoURL : photo}
+            />
           </ul>
         </div>
       </div>

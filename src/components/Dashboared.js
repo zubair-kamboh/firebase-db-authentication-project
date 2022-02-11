@@ -3,9 +3,8 @@ import Sidebar from './Sidebar'
 import Feed from './Feed'
 import '../App.css'
 import { auth } from '../firebase'
-import { onAuthStateChanged } from 'firebase/auth'
 import { Button, Container, Grid } from '@mui/material'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 
 const Dashboared = ({ user }) => {

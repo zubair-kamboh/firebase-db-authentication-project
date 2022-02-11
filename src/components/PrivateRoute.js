@@ -11,7 +11,5 @@ export function IsAuthenticated({ children }) {
 
 export function IsNotAuthenticated({ children }) {
   const { currentUser } = useAuth()
-  console.log(currentUser)
-
   return !currentUser ? children : <Navigate to="/dashboard" />
 }

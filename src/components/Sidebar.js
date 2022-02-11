@@ -1,13 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './Sidebar.css'
+import { getAuth } from '../firebase'
+
+import { useAuth } from './AuthContext'
 
 // icons and images
-import img from '../images/3.jpg'
 import { Avatar } from '@material-ui/core'
 import RecentSearch from './RecentSearch'
 import { RecentActors } from '@material-ui/icons'
 
 const Sidebar = () => {
+  const { currentUser } = useAuth()
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    setUser(currentUser)
+  }, [currentUser])
+
+  console.log(currentUser)
+
   return (
     <section className="sidebar">
       <div className="sidebar-container">
@@ -15,11 +26,17 @@ const Sidebar = () => {
         <div className="profile-container">
           <div className="bg-img"></div>
           <div className="profile-img-container">
-            <Avatar src={img} alt="profile image" className="profile-avatar" />
+            <Avatar
+              src={user?.photoURL && user.photoURL}
+              alt="profile image"
+              className="profile-avatar"
+            />
           </div>
           <div className="profile">
-            <h3 className="profile-name">Zubair Ali</h3>
-            <p>Front end website developer</p>
+            <h3 className="profile-name">
+              {user?.displayName && user.displayName}
+            </h3>
+            <p> {user?.email && user.email}</p>
           </div>
 
           {/* who viewed you */}

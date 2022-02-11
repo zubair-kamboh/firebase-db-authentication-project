@@ -16,15 +16,10 @@ import { HashLoader } from 'react-spinners'
 const App = () => {
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    // window.addEventListener('load', () => setLoading(!loading))
-    setTimeout(() => {
-      setLoading(!loading)
-    }, 2000)
-  }, [])
+  window.addEventListener('load', () => setLoading(!loading))
 
   return (
-    <AuthProvider>
+    <>
       {loading ? (
         <div
           style={{
@@ -37,40 +32,42 @@ const App = () => {
           <HashLoader color="#36D7B7" loading={loading} size={150} />
         </div>
       ) : (
-        <div className="app">
-          <Router>
-            <Navbar />
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <IsNotAuthenticated>
-                    <SignIn />
-                  </IsNotAuthenticated>
-                }
-              />
+        <AuthProvider>
+          <div className="app">
+            <Router>
+              <Navbar />
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <IsNotAuthenticated>
+                      <SignIn />
+                    </IsNotAuthenticated>
+                  }
+                />
 
-              <Route
-                path="/signup"
-                element={
-                  <IsNotAuthenticated>
-                    <SignUp />
-                  </IsNotAuthenticated>
-                }
-              />
-              <Route
-                path="/dashboard"
-                element={
-                  <IsAuthenticated>
-                    <Dashboared />
-                  </IsAuthenticated>
-                }
-              />
-            </Routes>
-          </Router>
-        </div>
+                <Route
+                  path="/signup"
+                  element={
+                    <IsNotAuthenticated>
+                      <SignUp />
+                    </IsNotAuthenticated>
+                  }
+                />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <IsAuthenticated>
+                      <Dashboared />
+                    </IsAuthenticated>
+                  }
+                />
+              </Routes>
+            </Router>
+          </div>
+        </AuthProvider>
       )}
-    </AuthProvider>
+    </>
   )
 }
 

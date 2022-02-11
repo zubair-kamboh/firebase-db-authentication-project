@@ -4,10 +4,11 @@ import img from '../images/3.jpg'
 import UploadFile from './UploadFile'
 import Post from './Post'
 import { db } from '../firebase'
+import { getAuth } from 'firebase/auth'
+
 import {
   collection,
   query,
-  getDocs,
   addDoc,
   serverTimestamp,
   onSnapshot,
@@ -21,9 +22,14 @@ import VideocamIcon from '@material-ui/icons/Videocam'
 import CreateIcon from '@material-ui/icons/Create'
 import EventAvailableIcon from '@material-ui/icons/EventAvailable'
 
+// animation library
+
 const Feed = () => {
   const [input, setInput] = useState('')
   const [posts, setPosts] = useState([])
+
+  const auth = getAuth()
+  const user = auth.currentUser
 
   // load posts
   useEffect(() => {
@@ -42,11 +48,13 @@ const Feed = () => {
     getdata()
   }, [])
 
-  console.log(posts)
-
   // on form submit
   const onFormSubmit = async (e) => {
     e.preventDefault()
+    console.log(e.target.value)
+    if (!input) {
+      return alert('please fill in the form')
+    }
 
     await addDoc(collection(db, 'posts'), {
       name: 'Zubair Ali',
@@ -64,7 +72,7 @@ const Feed = () => {
       {/* post input */}
       <div className="post_input_container">
         <div className="profile_input">
-          <Avatar className="avatar" alt="profile" src={img} />
+          <Avatar className="avatar" alt="profile" src={user.photoURL} />
           <form onSubmit={(e) => onFormSubmit(e)}>
             <input
               type="text"
@@ -74,7 +82,6 @@ const Feed = () => {
             />
           </form>
         </div>
-
         {/* icons & titles */}
         <div className="profile_uploads">
           <ul className="photo">
@@ -100,7 +107,7 @@ const Feed = () => {
                 name={post.name}
                 description={post.description}
                 message={post.message}
-                img={img}
+                img={user.photoURL}
               />
             )
           })}

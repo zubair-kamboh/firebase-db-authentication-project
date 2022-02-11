@@ -18,9 +18,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined'
 import { useState } from 'react'
 import { auth } from '../firebase'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from './AuthContext'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { useNavigate } from 'react-router-dom'
 
 function Copyright(props) {
   return (
@@ -46,24 +45,28 @@ const SignUp = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [photoUrl, setPhotoUrl] = useState('')
   const [error, setError] = useState('')
-  const { signUp } = useAuth()
 
   const navigate = useNavigate()
-
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     if (!name || !email || !password) {
       return alert('Please fill all the fields')
     }
-
-    await signUp(email, password)
+    createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+        updateProfile(userCredential.user, {
+          displayName: name,
+          photoURL: photoUrl,
+        })
+          .then(() => console.log('yes'))
+          .catch(() => console.log('no'))
+
         navigate('/', { state: 'You are registered! Please signin' })
       })
       .catch((error) => {
-        const errorCode = error.code
         const errorMessage = error.message
         setError(errorMessage)
       })
@@ -81,7 +84,10 @@ const SignUp = () => {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar
+            sx={{ m: 1, bgcolor: 'secondary.main' }}
+            style={{ backgroundColor: 'rebeccapurple' }}
+          >
             <VpnKeyOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -130,6 +136,17 @@ const SignUp = () => {
               type="password"
               id="password"
               autoComplete="current-password"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="photourl"
+              value={photoUrl}
+              onChange={(e) => setPhotoUrl(e.target.value)}
+              label="Photo Url"
+              type="text"
+              id="photourl"
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}

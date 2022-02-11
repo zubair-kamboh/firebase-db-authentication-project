@@ -1,11 +1,12 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { auth } from '../firebase'
+import Avatar from '@mui/material/Avatar'
 
 // image
 import image from '../images/3.jpg'
 
-const Navlink = ({ title, Icon, Avatar }) => {
+const Navlink = ({ title, Icon, photo }) => {
   const navigate = useNavigate()
 
   const logOut = () => {
@@ -16,7 +17,14 @@ const Navlink = ({ title, Icon, Avatar }) => {
   return (
     <li className="navlink" onClick={logOut}>
       {Icon && <Icon />}
-      {Avatar && <Avatar alt="Zubair Ali" className="avatar-img" src={image} />}
+
+      {photo && <Avatar src={photo} />}
+
+      {/* {firstLetter && (
+        <Avatar alt="zubair ali" className="avatar-img">
+          {firstLetter.slice(0, 1)}
+        </Avatar>
+      )} */}
       <span className="title">{title}</span>
     </li>
   )
