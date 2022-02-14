@@ -61,13 +61,13 @@ const SignIn = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user
-        console.log(user)
+
         navigate('/dashboard')
       })
       .catch((error) => {
         const errorCode = error.code
         const errorMessage = error.message
-        console.log(errorCode, errorMessage)
+
         setError(errorMessage)
       })
   }

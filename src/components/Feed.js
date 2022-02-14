@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import './Feed.css'
-import img from '../images/3.jpg'
 import UploadFile from './UploadFile'
 import Post from './Post'
 import { db } from '../firebase'
+
+import { motion, AnimatePresence } from 'framer-motion'
+
 import { getAuth } from 'firebase/auth'
 
 import {
@@ -21,6 +23,7 @@ import PhotoIcon from '@material-ui/icons/Photo'
 import VideocamIcon from '@material-ui/icons/Videocam'
 import CreateIcon from '@material-ui/icons/Create'
 import EventAvailableIcon from '@material-ui/icons/EventAvailable'
+import FormDialog from './FormDialog'
 
 // animation library
 
@@ -72,7 +75,11 @@ const Feed = () => {
       {/* post input */}
       <div className="post_input_container">
         <div className="profile_input">
-          <Avatar className="avatar" alt="profile" src={user.photoURL} />
+          <Avatar
+            className="avatar"
+            alt="profile"
+            src={user?.photoURL && user.photoURL}
+          />
           <form onSubmit={(e) => onFormSubmit(e)}>
             <input
               type="text"
@@ -98,20 +105,22 @@ const Feed = () => {
       </div>
 
       {/* posts */}
-      <div className="posts">
-        {posts &&
-          posts.map((post) => {
-            return (
-              <Post
-                key={post.id}
-                name={post.name}
-                description={post.description}
-                message={post.message}
-                img={user.photoURL}
-              />
-            )
-          })}
-      </div>
+      <motion.div layout className="posts">
+        <AnimatePresence>
+          {posts &&
+            posts.map((post) => {
+              return (
+                <Post
+                  key={post.id}
+                  name={post.name}
+                  description={post.description}
+                  message={post.message}
+                  img={user?.photoURL}
+                />
+              )
+            })}
+        </AnimatePresence>
+      </motion.div>
     </main>
   )
 }

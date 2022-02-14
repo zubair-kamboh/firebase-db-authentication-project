@@ -1,8 +1,6 @@
 import React from 'react'
 import UploadFile from './UploadFile'
-
-import { useSpring, animated } from 'react-spring'
-
+import { motion } from 'framer-motion'
 // icons
 import { Avatar } from '@material-ui/core'
 import ThumbUpIcon from '@material-ui/icons/ThumbUp'
@@ -11,13 +9,17 @@ import ShareIcon from '@material-ui/icons/Share'
 import SendIcon from '@material-ui/icons/Send'
 
 const Post = ({ name, message, description, img }) => {
-  const props = useSpring({
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-    delay: 500,
-  })
   return (
-    <animated.div style={props} className="post">
+    <motion.div
+      layout
+      animate={{
+        scale: 1,
+      }}
+      initial={{ scale: 0 }}
+      exit={{ scale: 0 }}
+      transition={{ duration: 1 }}
+      className="post"
+    >
       {/* Channel & Profile */}
       <div className="channel_details_container">
         <Avatar alt="my profile" src={img} />
@@ -37,7 +39,7 @@ const Post = ({ name, message, description, img }) => {
         <UploadFile color="error" Icon={ShareIcon} title="Share" />
         <UploadFile color="primary" Icon={SendIcon} title="Send" />
       </ul>
-    </animated.div>
+    </motion.div>
   )
 }
 

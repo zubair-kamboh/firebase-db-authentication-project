@@ -17,8 +17,6 @@ const Sidebar = () => {
     setUser(currentUser)
   }, [currentUser])
 
-  console.log(currentUser)
-
   return (
     <section className="sidebar">
       <div className="sidebar-container">

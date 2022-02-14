@@ -10,16 +10,17 @@ import SettingsInputAntennaIcon from '@material-ui/icons/SettingsInputAntenna'
 import WorkIcon from '@material-ui/icons/Work'
 // import MessageIcon from '@material-ui/icons/Message'
 import NotificationsIcon from '@material-ui/icons/Notifications'
-import { Avatar } from '@material-ui/core'
 import { getAuth } from 'firebase/auth'
 import { useAuth } from './AuthContext'
-import { useEffect } from 'react'
+import FormDialog from './FormDialog'
 
 const Navbar = () => {
   const [photo, setPhoto] =
     'https://www.nicepng.com/png/detail/138-1388174_login-account-icon.png'
 
+  // const currentUser = getAuth().currentUser
   const { currentUser } = useAuth()
+  console.log(currentUser)
 
   return (
     <header className="nav-bar">
@@ -64,6 +65,7 @@ const Navbar = () => {
               title="Me"
               photo={currentUser?.photoURL ? currentUser.photoURL : photo}
             />
+            {currentUser && <FormDialog />}
           </ul>
         </div>
       </div>
